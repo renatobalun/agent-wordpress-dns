@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 
 from app.engine.tools.wordpress import WordpressSpec
 from app.engine.tools.dns import DnsSpec
+from app.engine.tools.fallback_to_human import FallbackToHumanSpec
+from app.engine.prompt import get_technical_support_system_prompt
 
 load_dotenv()
 
@@ -15,14 +17,15 @@ openai_llm = OpenAI(model=openai_model)
 def get_agent():
     wordpress_tool = WordpressSpec().to_tool_list()
     dns_tool = DnsSpec().to_tool_list()
+    fallback_to_human_tool = FallbackToHumanSpec().to_tool_list()
     
-    tools = (wordpress_tool + dns_tool)
+    tools = (wordpress_tool + dns_tool + fallback_to_human_tool)
     
     agent = FunctionAgent(
         tools=tools,
         llm=openai_llm,
         verbose=True,
-        system_prompt="You are an assistant that helps with fixing wordpress and DNS errors. If a domain is mentioned in a query, take that domain and pass it to a DNS tool.",
+        system_prompt=get_technical_support_system_prompt("English"),
         max_function_calls=1
     )
     
