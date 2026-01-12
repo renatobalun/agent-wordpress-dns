@@ -1,0 +1,10 @@
+uvicorn
+gunicorn
+python-dotenv
+fastapi
+qdrant_client
+llama-index
+llama-index-vector-stores-qdrant
+llama-index-agent-openai
+python-multipart
+aiosmtplib
